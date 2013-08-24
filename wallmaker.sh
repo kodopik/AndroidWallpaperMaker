@@ -90,9 +90,19 @@ do
 
       if [[ $top -eq 1 ]]
       then
-        convert "$File" -crop ${xp}x${ypn}+0+${crop} -resize $ScrDir -quality 95% "$OutputFile" && echo -n "ok" || echo -n "ERROR"
+        convert "$File" \
+          -crop ${xp}x${ypn}+0+${crop} \
+          -resize $ScrDir \
+          -quality 95% "$OutputFile" \
+          && echo -n "ok" \
+          || echo -n "ERROR"
       else
-        convert "$File" -crop ${xpn}x${yp}+${crop}+0 -resize $ScrDir -quality 95% "$OutputFile" && echo -n "ok" || echo -n "ERROR"
+        convert "$File" \
+          -crop ${xpn}x${yp}+${crop}+0 \
+          -resize $ScrDir \
+          -quality 95% "$OutputFile" \
+          && echo -n "ok" \
+          || echo -n "ERROR"
       fi
       
       printf "\t\t(${OutputFile})\n";
