@@ -8,8 +8,8 @@ if [[ ${1} =~ ${HELP_LINES} ]]
 then
   echo "Automatically makes wallpapers for Android phones out of big pictures."
   echo "Usage:"
-  echo "  ./${0} [DIRECTORY]"
-  echo "[DIRECTORY] must contain subdirectories with pictures."
+  echo "  bash ${0} [DIRECTORY]"
+  echo "[DIRECTORY] must contain subdirectories with pictures (JPEG or PNG only)."
   exit 0
 fi
 
@@ -42,7 +42,9 @@ test -d "$OrigDir" || _ERR_ 2 "No such directory"
 test -f "$MInfoFile" || _ERR_ 3 "File not found: ${MInfoFile}"
 test -f "$ScreensFile" || _ERR_ 4 "File not found: ${ScreensFile}"
 
-for Size in `cat "$ScreensFile"`
+#for Size in `cat "$ScreensFile"`
+cat "$ScreensFile" | \
+while read Size
 do
 	x=`echo $Size | awk -Fx '{ print 2*$1 }'` # Wallpaper width = double screen width
 	y=`echo $Size | awk -Fx '{ print $2 }'`   # Wallpaper height = screen height
