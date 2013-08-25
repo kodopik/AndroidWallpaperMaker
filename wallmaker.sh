@@ -14,6 +14,8 @@ then
   exit 0
 fi
 
+QUALITY='92%'
+
 ## FILE 1:
 # MediaInfo parameters.
 ## FORMAT:
@@ -93,14 +95,16 @@ do
         convert "$File" \
           -crop ${xp}x${ypn}+0+${crop} \
           -resize $ScrDir \
-          -quality 95% "$OutputFile" \
+          -quality $QUALITY \
+          "$OutputFile" \
           && echo -n "ok" \
           || echo -n "ERROR"
       else
         convert "$File" \
           -crop ${xpn}x${yp}+${crop}+0 \
           -resize $ScrDir \
-          -quality 95% "$OutputFile" \
+          -quality $QUALITY \
+          "$OutputFile" \
           && echo -n "ok" \
           || echo -n "ERROR"
       fi
