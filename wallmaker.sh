@@ -1,7 +1,9 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
+#
 ## Automatically makes wallpapers for Android phones out of big pictures.
 ## ImageMagick is supposed to be installed.
+
+set -eo pipefail
 
 HELP_LINES="-h|--help"
 
@@ -21,20 +23,20 @@ QUALITY='92%'
 ## FORMAT:
 # Image;%Width%x%Height%
 # Video;%Width%x%Height%
-MInfoFile='mediainfo.ini'
+MI_FILE='mediainfo.ini'
 
 ## FILEi 2:
 # Screen sizes list.
 ## FORMAT:
 # WidhtxHeight
 # e.g. 240x320
-ScreensFile='screens.ini'
+SCR_FILE='screens.ini'
 
 ## DIRECTORY 1:
 # Subdirs of this dir are the categories of pictures (Animals, Buildings, Landscapes etc.)
 OrigDir="$1"
 
-_ERR_()
+function _ERR_()
 {
   echo "$2"
   exit $1
@@ -42,11 +44,11 @@ _ERR_()
 
 test "$OrigDir" || _ERR_ 1 "Directory not specified"
 test -d "$OrigDir" || _ERR_ 2 "No such directory"
-test -f "$MInfoFile" || _ERR_ 3 "File not found: ${MInfoFile}"
-test -f "$ScreensFile" || _ERR_ 4 "File not found: ${ScreensFile}"
+test -f "$MI_FILE" || _ERR_ 3 "File not found: ${MI_FILE}"
+test -f "$SCR_FILE" || _ERR_ 4 "File not found: ${SCR_FILE}"
 
-#for Size in `cat "$ScreensFile"`
-cat "$ScreensFile" | \
+#for Size in `cat "$SCR_FILE"`
+cat "$SCR_FILE" | \
 while read Size
 do
   x=`echo $Size | awk -Fx '{ print 2*$1 }'` # Wallpaper width = double screen width
@@ -68,7 +70,7 @@ do
       Format=`mediainfo --Inform="General;%Format%" "$File"`
       test "$Format" != "JPEG" -a "$Format" != "PNG" && continue
 
-      PicSize=`mediainfo --Inform="file://${MInfoFile}" "$File"`
+      PicSize=`mediainfo --Inform="file://${MI_FILE}" "$File"`
       xp=`echo $PicSize | awk -Fx '{ print $1 }'`
       yp=`echo $PicSize | awk -Fx '{ print $2 }'`
       test $xp -lt $x -o $yp -lt $y && continue
